@@ -1,0 +1,18 @@
+#
+# this is your module manifest and used by Titanium
+# during compilation, packaging, distribution, etc.
+#
+version: 1.0.0
+apiversion: 2
+architectures: armeabi armeabi-v7a x86
+description: ti.accountkit
+author: Hans Knoechek
+license: Apache 2
+copyright: Copyright (c) 2016 Hans Knoechel
+
+# these should not be edited
+name: ti.accountkit
+moduleid: ti.accountkit
+guid: b7d453f4-d5e7-4394-a8ff-08c3c4704a7c
+platform: android
+minsdk: 5.0.0
