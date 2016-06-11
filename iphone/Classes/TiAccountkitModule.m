@@ -126,6 +126,26 @@
     }, NO);
 }
 
+- (void)cancelLogin:(id)unused
+{
+    [accountKit cancelLogin];
+}
+
+- (void)currentAccessToken
+{
+    return [self dictionaryFromAccessToken:[accountKit currentAccessToken]];
+}
+
+- (NSString*)graphVersion
+{
+    return [AKFAccountKit graphVersionString];
+}
+
+- (NSString*)version
+{
+    return [AKFAccountKit versionString];
+}
+
 #pragma mark Delegates
 
 - (void)viewController:(UIViewController<AKFViewController> *)viewController didCompleteLoginWithAccessToken:(id<AKFAccessToken>)accessToken state:(NSString *)state
@@ -167,10 +187,11 @@
 - (NSDictionary*)dictionaryFromAccessToken:(id<AKFAccessToken>)accessToken
 {
     return @{
-        @"accountID": [accessToken accountID],
-        @"applicationID": [accessToken applicationID],
-        @"lastRefresh": [accessToken lastRefresh],
-        @"access_token": [accessToken tokenString]
+         @"accountID": [accessToken accountID],
+         @"applicationID": [accessToken applicationID],
+         @"lastRefresh": [accessToken lastRefresh],
+         @"tokenRefreshInterval": NUMDOUBLE([accessToken tokenRefreshInterval]),
+         @"tokenString": [accessToken tokenString]
     };
 }
 
