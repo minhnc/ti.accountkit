@@ -65,46 +65,18 @@
     NSLocale *currentLocale = [NSLocale currentLocale];
     NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
     
-    AKFPhoneNumber *phoneNumber = [[AKFPhoneNumber alloc] initWithCountryCode:@"DE" phoneNumber:[TiUtils stringValue:phone]];
+    AKFPhoneNumber *phoneNumber = [[AKFPhoneNumber alloc] initWithCountryCode:@"CA" phoneNumber:[TiUtils stringValue:phone]];
     NSString *inputState = [[NSUUID UUID] UUIDString];
     UIViewController<AKFViewController> *viewController = [accountKit viewControllerForPhoneLoginWithPhoneNumber:nil state:inputState];
     [viewController setEnableSendToFacebook:YES];
+
+    // Country Codes
+    viewController.whitelistedCountryCodes = @[@"CA", @"US", @"VN"];
+    viewController.defaultCountryCode = @"CA";
     
     [self _prepareLoginViewController:viewController]; // apply theme
-    
     [viewController setDelegate:self];
     [[[TiApp app] controller] presentViewController:viewController animated:YES completion:nil];
-}
-
-- (void)_prepareLoginViewController:(UIViewController<AKFViewController> *)loginViewController
-{
-    AKFTheme *theme = [AKFTheme outlineThemeWithPrimaryColor:[self _colorWithHex:0xff333333]
-                                            primaryTextColor:[UIColor whiteColor]
-                                          secondaryTextColor:[self _colorWithHex:0xff151515]
-                                              statusBarStyle:UIStatusBarStyleLightContent];
-    theme.backgroundColor = [self _colorWithHex:0xfff7f7f7];
-    theme.buttonBackgroundColor = [self _colorWithHex:0xffe02727];
-    theme.buttonBorderColor = [self _colorWithHex:0xffe02727];
-    theme.inputBorderColor = [self _colorWithHex:0x323A4545];
-    
-    loginViewController.theme = theme;
-    
-    // Title
-    theme.headerTextType = AKFHeaderTextTypeAppName; // title bar text says `APP_NAME`
-    // theme.headerTextType = AKFHeaderTextTypeLogin; // title bar text says `Log into APP_NAME`
-    
-    // Country Codes
-    loginViewController.whitelistedCountryCodes = @[@"CA", @"US", @"VN"];
-    loginViewController.defaultCountryCode = @"CA";
-}
-
-- (UIColor *)_colorWithHex:(NSUInteger)hex
-{
-    CGFloat alpha = ((CGFloat)((hex & 0xff000000) >> 24)) / 255.0;
-    CGFloat red = ((CGFloat)((hex & 0x00ff0000) >> 16)) / 255.0;
-    CGFloat green = ((CGFloat)((hex & 0x0000ff00) >> 8)) / 255.0;
-    CGFloat blue = ((CGFloat)((hex & 0x000000ff) >> 0)) / 255.0;
-    return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
 }
 
 - (void)loginWithEmail:(id)args
@@ -117,8 +89,37 @@
     NSString *prefilledEmail = [TiUtils stringValue:email];
     NSString *inputState = [[NSUUID UUID] UUIDString];
     UIViewController<AKFViewController> *viewController = [accountKit viewControllerForEmailLoginWithEmail:prefilledEmail state:inputState];
+    
+    [self _prepareLoginViewController:viewController]; // apply theme
     [viewController setDelegate:self];
     [[[TiApp app] controller] presentViewController:viewController animated:YES completion:nil];
+}
+
+- (void)_prepareLoginViewController:(UIViewController<AKFViewController> *)loginViewController
+{
+    AKFTheme *theme = [AKFTheme outlineThemeWithPrimaryColor:[self _colorWithHex:0xff323a45]
+                                            primaryTextColor:[UIColor whiteColor]
+                                          secondaryTextColor:[self _colorWithHex:0xff151515]
+                                              statusBarStyle:UIStatusBarStyleLightContent];
+    theme.backgroundColor = [self _colorWithHex:0xfff7f7f7];
+    theme.buttonBackgroundColor = [self _colorWithHex:0xffff3366];
+    theme.buttonBorderColor = [self _colorWithHex:0xffff3366];
+    theme.inputBorderColor = [self _colorWithHex:0x323A4545];
+    
+    loginViewController.theme = theme;
+    
+    // Title
+    theme.headerTextType = AKFHeaderTextTypeAppName; // title bar text says `APP_NAME`
+    // theme.headerTextType = AKFHeaderTextTypeLogin; // title bar text says `Log into APP_NAME`
+}
+
+- (UIColor *)_colorWithHex:(NSUInteger)hex
+{
+    CGFloat alpha = ((CGFloat)((hex & 0xff000000) >> 24)) / 255.0;
+    CGFloat red = ((CGFloat)((hex & 0x00ff0000) >> 16)) / 255.0;
+    CGFloat green = ((CGFloat)((hex & 0x0000ff00) >> 8)) / 255.0;
+    CGFloat blue = ((CGFloat)((hex & 0x000000ff) >> 0)) / 255.0;
+    return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
 }
 
 - (void)logout:(id)unused
